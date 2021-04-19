@@ -1,55 +1,85 @@
 import "./styles.css";
 
-const onClickAdd = () => {
-  const inputText = document.getElementById("add-text").value;
-  document.getElementById("add-text").value = "";
-
+const createSpan = (todoText) => {
   const span = document.createElement("span");
-  span.innerText = inputText;
+  span.innerText = todoText;
+  return span;
+};
 
-  const completeButton = document.createElement("button");
-  completeButton.innerText = "完了";
-  completeButton.addEventListener("click", () => {
-    const div2 = document.createElement("div");
-    div2.className = "list-row";
-    const span2 = document.createElement("span");
-    span2.innerText = inputText;
+const createBaseBtn = (text) => {
+  const btn = document.createElement("button");
+  btn.innerText = text;
+  return btn;
+};
 
-    const backButton = document.createElement("button");
-    backButton.innerText = "戻す";
-    backButton.addEventListener("click", () => {
-      const deleteTarget3 = backButton.parentNode.parentNode;
-      document.getElementById("complete-ul").removeChild(deleteTarget3);
-    });
-    div2.appendChild(span2);
-    div2.appendChild(backButton);
-
-    const li2 = document.createElement("li");
-    li2.appendChild(div2);
-    document.getElementById("complete-ul").appendChild(li2);
-    const deleteTarget2 = completeButton.parentNode.parentNode;
-    document.getElementById("incomplete-ul").removeChild(deleteTarget2);
+const createCompleteBtn = (todoText) => {
+  const completeBtn = createBaseBtn("完了");
+  completeBtn.addEventListener("click", () => {
+    onClickCompleteBtn(todoText, completeBtn);
   });
+  return completeBtn;
+};
 
-  const deleteButton = document.createElement("button");
-  deleteButton.innerText = "削除";
-  deleteButton.addEventListener("click", () => {
-    const deleteTarget = deleteButton.parentNode.parentNode;
-    document.getElementById("incomplete-ul").removeChild(deleteTarget);
+const onClickCompleteBtn = (todoText, completeButton) => {
+  const span = createSpan(todoText);
+  const backBtn = creteBackBtn(todoText);
+  const li = createLi(span, backBtn);
+  document.getElementById("complete-ul").appendChild(li);
+  removeTodo("incomplete-ul", completeButton);
+};
+
+const removeTodo = (id, btn) => {
+  const deleteTarget = btn.parentNode.parentNode;
+  document.getElementById(id).removeChild(deleteTarget);
+};
+
+const onClickDeleteBtn = (deleteBtn) => {
+  removeTodo("incomplete-ul", deleteBtn);
+};
+
+const creteDeleteBtn = () => {
+  const deleteBtn = createBaseBtn("削除");
+  deleteBtn.addEventListener("click", () => {
+    onClickDeleteBtn(deleteBtn);
   });
+  return deleteBtn;
+};
 
+const creteBackBtn = (todoText) => {
+  const backBtn = createBaseBtn("戻す");
+  backBtn.addEventListener("click", () => {
+    onClickBackBtn(todoText, backBtn);
+  });
+  return backBtn;
+};
+
+const onClickBackBtn = (todoText, backBtn) => {
+  addItemToInCompleteList(todoText);
+  removeTodo("complete-ul", backBtn);
+};
+
+const createLi = (span, btn1, btn2 = null) => {
   const div = document.createElement("div");
   div.className = "list-row";
   div.appendChild(span);
-  div.appendChild(completeButton);
-  div.appendChild(deleteButton);
+  div.appendChild(btn1);
+  if (btn2) div.appendChild(btn2);
 
   const li = document.createElement("li");
   li.appendChild(div);
+  return li;
+};
 
+const addItemToInCompleteList = (todoText) => {
+  const span = createSpan(todoText);
+  const completeBtn = createCompleteBtn(todoText);
+  const deleteBtn = creteDeleteBtn(todoText);
+  const li = createLi(span, completeBtn, deleteBtn);
   document.getElementById("incomplete-ul").appendChild(li);
 };
 
 document.getElementById("add-btn").addEventListener("click", () => {
-  onClickAdd();
+  const inputText = document.getElementById("add-text").value;
+  document.getElementById("add-text").value = "";
+  addItemToInCompleteList(inputText);
 });
