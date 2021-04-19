@@ -23,14 +23,14 @@ const createCompleteBtn = (todoText) => {
 const onClickCompleteBtn = (todoText, completeButton) => {
   const span = createSpan(todoText);
   const backBtn = creteBackBtn(todoText);
-  const li = createLi(span, backBtn);
+  const li = createItem(span, backBtn);
   document.getElementById("complete-ul").appendChild(li);
   removeTodo("incomplete-ul", completeButton);
 };
 
-const removeTodo = (id, btn) => {
+const removeTodo = (removeUlId, btn) => {
   const deleteTarget = btn.parentNode.parentNode;
-  document.getElementById(id).removeChild(deleteTarget);
+  document.getElementById(removeUlId).removeChild(deleteTarget);
 };
 
 const onClickDeleteBtn = (deleteBtn) => {
@@ -58,7 +58,7 @@ const onClickBackBtn = (todoText, backBtn) => {
   removeTodo("complete-ul", backBtn);
 };
 
-const createLi = (span, btn1, btn2 = null) => {
+const createItem = (span, btn1, btn2 = null) => {
   const div = document.createElement("div");
   div.className = "list-row";
   div.appendChild(span);
@@ -74,12 +74,26 @@ const addItemToInCompleteList = (todoText) => {
   const span = createSpan(todoText);
   const completeBtn = createCompleteBtn(todoText);
   const deleteBtn = creteDeleteBtn(todoText);
-  const li = createLi(span, completeBtn, deleteBtn);
+  const li = createItem(span, completeBtn, deleteBtn);
   document.getElementById("incomplete-ul").appendChild(li);
+};
+
+document.getElementById("add-text").addEventListener("input", (event) => {
+  setAddBtnDisabled();
+});
+
+const setAddBtnDisabled = () => {
+  const inputText = document.getElementById("add-text").value;
+  if (inputText?.length === 0) {
+    document.getElementById("add-btn").setAttribute("disabled", true);
+  } else {
+    document.getElementById("add-btn").removeAttribute("disabled");
+  }
 };
 
 document.getElementById("add-btn").addEventListener("click", () => {
   const inputText = document.getElementById("add-text").value;
   document.getElementById("add-text").value = "";
+  setAddBtnDisabled();
   addItemToInCompleteList(inputText);
 });

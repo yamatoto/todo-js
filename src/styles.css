@@ -35,7 +35,7 @@ li span {
   align-items: center;
 }
 
-button:hover {
+button:hover:not([disabled]) {
   background-color: #ff7fff;
   color: #fff;
   cursor: pointer;
