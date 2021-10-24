@@ -1,3 +1,3 @@
-# todo-js
+# 概要
 JS学習用  
-Vanilla jsでTODOアプリ作った
+Vanilla jsでTODOアプリ
