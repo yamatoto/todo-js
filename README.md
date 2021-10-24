@@ -1,2 +1,3 @@
 # todo-js
-Created with CodeSandbox
+JS学習用  
+Vanilla jsでTODOアプリ作った
